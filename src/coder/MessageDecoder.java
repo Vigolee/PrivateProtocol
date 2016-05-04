@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 消息解码器，继承LengthFieldBasedFrameDecoder，
+ * 解决半包、粘包问题
  * Created by Vigo on 16/4/26.
  */
 public class MessageDecoder extends LengthFieldBasedFrameDecoder {

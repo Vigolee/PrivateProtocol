@@ -30,7 +30,9 @@ public class MessageEncoder extends MessageToMessageEncoder<Message> {
             throw new Exception("The message is null");
         System.out.println("start encoder message : " + message);
         ByteBuf sendBuf = Unpooled.buffer();
+
         sendBuf.writeInt(message.getHeader().getCrcCode());
+        // 最后更新消息长度
         sendBuf.writeInt(message.getHeader().getLength());
         sendBuf.writeLong(message.getHeader().getSessionID());
         sendBuf.writeByte(message.getHeader().getType());

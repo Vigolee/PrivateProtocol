@@ -29,6 +29,7 @@ public class Server {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         // -8表示lengthAdjustment，让解码器从0开始截取字节，并且包含消息头
+                        // 消息长度在第4字节，长度占位4字节，消息长度＝消息头 + 消息体，修正（4 + 4 = 8）
                         socketChannel.pipeline().addLast(new MessageDecoder(1024 * 1024, 4, 4, -8, 0))
                                 .addLast(new MessageEncoder())
                                 .addLast(new LoginAuthRespHandler());
