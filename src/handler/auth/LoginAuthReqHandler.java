@@ -18,7 +18,6 @@ public class LoginAuthReqHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
         Message message = (Message) msg;
 
         if (message.getHeader() != null && message.getHeader()

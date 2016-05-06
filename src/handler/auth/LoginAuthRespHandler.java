@@ -23,8 +23,6 @@ public class LoginAuthRespHandler extends ChannelHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         Message message = (Message) msg;
 
-        System.out.println("server receive message : " + message);
-
         //握手请求消息处理，其他消息传递
         if (message.getHeader() != null && message.getHeader().
                 getType() == MessageType.LOGIN_REQUEST) {

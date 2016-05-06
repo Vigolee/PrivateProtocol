@@ -28,7 +28,6 @@ public class MessageEncoder extends MessageToMessageEncoder<Message> {
     protected void encode(ChannelHandlerContext channelHandlerContext, Message message, List<Object> list) throws Exception {
         if (message == null || message.getHeader() == null)
             throw new Exception("The message is null");
-        System.out.println("start encoder message : " + message);
         ByteBuf sendBuf = Unpooled.buffer();
 
         sendBuf.writeInt(message.getHeader().getCrcCode());
@@ -57,7 +56,6 @@ public class MessageEncoder extends MessageToMessageEncoder<Message> {
         // 在第4个字节处写入Buffer的长度
         int readableBytes = sendBuf.readableBytes();
         sendBuf.setInt(4, readableBytes);
-        System.out.println("readableBytes: " + readableBytes);
 
         // 把Message添加到List传递到下一个Handler
         list.add(sendBuf);
