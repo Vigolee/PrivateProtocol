@@ -20,14 +20,15 @@ public class HeartBeatReqHandler extends ChannelHandlerAdapter{
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
         Message message = (Message) msg;
         // 握手成功，主动发起心跳通信
         if (message.getHeader() != null && message.getHeader()
-                .getType() == MessageType.LOGIN_REQUEST) {
-            heartBeat = ctx.executor().scheduleAtFixedRate(new HeartBeatTask(ctx)
-                    , 0, 5000, TimeUnit.MILLISECONDS);
+                .getType() == MessageType.LOGIN_RESPONSE) {
+                heartBeat = ctx.executor().scheduleAtFixedRate(new HeartBeatTask(ctx)
+                        , 0, 10000, TimeUnit.MILLISECONDS);
         }else if (message.getHeader() != null && message.getHeader()
-                .getType() == MessageType.HEARTBEAT_REQUEST) {
+                .getType() == MessageType.HEARTBEAT_RESPONSE) {
             System.out.println("client receive heartbeat : " + message);
         } else {
             ctx.fireChannelRead(msg);

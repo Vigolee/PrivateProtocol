@@ -4,6 +4,7 @@ import coder.MessageDecoder;
 import coder.MessageEncoder;
 import config.Configuration;
 import handler.auth.LoginAuthReqHandler;
+import handler.heart.HeartBeatReqHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -16,6 +17,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 客户端
@@ -34,10 +36,11 @@ public class Client {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel channel) throws Exception {
-                        channel.pipeline().addLast(new MessageDecoder(1024 * 1024, 4, 4, -8, 0))
-                                .addLast("MessageEncoder", new MessageEncoder())
-                                .addLast("LoginAuthReqHandler", new LoginAuthReqHandler());
-                             //   .addLast("HeartBeatHandler", new HeartBeatReqHandler());
+                        channel.pipeline().addLast(new MessageDecoder(1024 * 1024, 4, 4, -8, 0));
+
+                        channel.pipeline().addLast("MessageEncoder", new MessageEncoder());
+                        channel.pipeline().addLast("LoginAuthReqHandler", new LoginAuthReqHandler());
+                        channel.pipeline() .addLast("HeartBeatHandler", new HeartBeatReqHandler());
                     }
                 });
         // 发起异步连接
@@ -50,18 +53,18 @@ public class Client {
         finally {
 
             // 释放资源，重连
-//            executor.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        TimeUnit.SECONDS.sleep(5);
-//                        connect(Configuration.IP, Configuration.PORT);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//            });
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                        connect(Configuration.IP, Configuration.PORT);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
         }
     }
 

@@ -19,6 +19,7 @@ public class HeartBeatRespHandler extends ChannelHandlerAdapter {
                 .getType() == MessageType.HEARTBEAT_REQUEST) {
             System.out.println("server receive heartBeat : " + message);
             Message heartBeatMessage = createHeartBeat();
+            System.out.println("server send heartBeat : " + heartBeatMessage);
             ctx.writeAndFlush(heartBeatMessage);
         }else {
             ctx.fireChannelRead(msg);
